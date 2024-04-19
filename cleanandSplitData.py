@@ -73,7 +73,7 @@ final_drop_columns = ['source', 'host_response_time', 'host_location',
                        'host_neighbourhood', 'neighbourhood', 'neighbourhood_cleansed',
                        'property_type', 'room_type', 'bathrooms_text', 'combined_text', 'description',
                       'neighborhood_overview', 'name', 'calendar_last_scraped', 'amenities']
-# 合并文本数据为单个列
+
 data_df['combined_text'] = data_df['description'] + ' ' + data_df['neighborhood_overview'] + ' ' + data_df['name']  + \
                            ' ' + data_df['amenities']
 
@@ -102,7 +102,7 @@ text_feature_names = tfidf.get_feature_names_out()
 # high_corr_features = correlations[abs(correlations) > 0.1]
 # filtered_data = output_df[high_corr_features.index.tolist()]
 # corr_matrix = filtered_data.corr()
-# plt.figure(figsize=(10, 8))  # 可以调整大小以适应特征的数量
+# plt.figure(figsize=(10, 8))
 # sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap='coolwarm', cbar=True)
 # plt.title('Correlation Matrix Heatmap')
 # plt.show()
@@ -114,11 +114,10 @@ features_df = pd.DataFrame(features.toarray(), columns=all_feature_names)
 combined_df = pd.concat([data_df.reset_index(drop=True), features_df], axis=1)
 output_df = combined_df.drop(columns = final_drop_columns)
 
-X = output_df.drop('price', axis=1)  # 删除 price 列，保留所有其他列作为特征
-y = output_df['price']  # 目标变量
-# 分割数据为训练集和测试集，常见的比例为训练集 80%，测试集 20%
+X = output_df.drop('price', axis=1)
+y = output_df['price']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1999)
-X_train.to_csv('trainX.csv', index=False)  # 保存特征数据
+X_train.to_csv('trainX.csv', index=False)
 y_train.to_csv('trainy.csv', index=False)
-X_test.to_csv('testX.csv', index=False)  # 保存特征数据
+X_test.to_csv('testX.csv', index=False)
 y_test.to_csv('testy.csv', index=False)
